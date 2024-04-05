@@ -1,18 +1,19 @@
-FROM alpine:latest
+FROM ubuntu:latest
 
 # Install necessary packages
-RUN apk --no-cache add apache2-utils apache2 zip unzip
+RUN apt-get update && \
+    apt-get install -y apache2 zip unzip && \
+    rm -rf /var/lib/apt/lists/*
 
-# Download and extract the website template
-ADD https://www.free-css.com/assets/files/free-css-templates/download/page279/jack-and-rose.zip /var/www/html/
+# Download and unzip the template
+ADD https://www.free-css.com/assets/files/free-css-templates/download/page258/loxury.zip /var/www/html/
 WORKDIR /var/www/html
-RUN unzip jack-and-rose.zip && \
-    cp -rvf free-wedding-website-template/* . && \
-    rm -rf free-wedding-website-template jack-and-rose.zip
-
-# Set the working directory and expose port 80
-WORKDIR /var/www/html
-EXPOSE 80
+RUN unzip loxury.zip && \
+    cp -rvf loxury/* . && \
+    rm -rf loxury loxury.zip
 
 # Start Apache HTTP server
-CMD ["httpd", "-D", "FOREGROUND"]
+CMD ["apache2ctl", "-D", "FOREGROUND"]
+
+# Expose port 80
+EXPOSE 80
