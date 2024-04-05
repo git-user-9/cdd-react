@@ -1,18 +1,11 @@
-FROM centos:latest
-
-# Install necessary packages
-RUN yum install -y httpd unzip && \
-    yum clean all
-
-# Download and unzip the template
-ADD https://www.free-css.com/assets/files/free-css-templates/download/page258/loxury.zip /var/www/html/
+FROM centos:7.9.2009
+RUN yum install -y httpd \
+zip \
+unzip
+ADD https://www.free-css.com/assets/files/free-css-templates/download/page279/jack-and-rose.zip /var/www/html/=
 WORKDIR /var/www/html
-RUN unzip loxury.zip && \
-    cp -rvf loxury/* . && \
-    rm -rf loxury loxury.zip
-
-# Start Apache HTTP server
+RUN unzip jack-and-rose.zip
+RUN cp -rvf free-wedding-website-template/* .
+RUN rm -rf free-wedding-website-template jack-and-rose.zip
 CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
-
-# Expose port 80
 EXPOSE 80
