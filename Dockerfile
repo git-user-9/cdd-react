@@ -1,19 +1,19 @@
-# Step 1: Use an official Node.js runtime as a parent image
-FROM node:14
+FROM ubuntu:latest
 
-# Step 2: Set the working directory in the container to /app
-WORKDIR /app
+# Install necessary packages
+RUN apt-get update && \
+    apt-get install -y apache2 zip unzip && \
+    rm -rf /var/lib/apt/lists/*
 
-# Step 3: Clone the repository containing the React app
-# Note: The provided URL was not a direct link to a zip file but a GitHub repo. Adjust if you have a direct zip file URL.
-RUN git clone https://github.com/mokshit-giddanti/React.git .
+# Download and unzip the template
+ADD https://www.free-css.com/assets/files/free-css-templates/download/page258/loxury.zip /var/www/html/
+WORKDIR /var/www/html
+RUN unzip loxury.zip && \
+    cp -rvf loxury/* . && \
+    rm -rf loxury loxury.zip
 
-# Step 4: Install the dependencies defined in package.json
-RUN npm install
+# Start Apache HTTP server
+CMD ["apache2ctl", "-D", "FOREGROUND"]
 
-# Step 5: Make port 3000 available to the world outside this container
-# This assumes that your React app runs on port 3000 (default for create-react-app)
-EXPOSE 3000
-
-# Step 6: Define the command to run the app
-CMD ["npm", "start"]
+# Expose port 80
+EXPOSE 80
