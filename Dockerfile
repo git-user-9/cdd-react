@@ -1,7 +1,9 @@
-FROM centos:latest
+FROM ubuntu:latest
 
 # Install necessary packages
-RUN yum install -y httpd zip unzip
+RUN apt-get update && \
+    apt-get install -y apache2 zip unzip && \
+    rm -rf /var/lib/apt/lists/*
 
 # Download and unzip the template
 ADD https://www.free-css.com/assets/files/free-css-templates/download/page258/loxury.zip /var/www/html/
@@ -11,7 +13,7 @@ RUN unzip loxury.zip && \
     rm -rf loxury loxury.zip
 
 # Start Apache HTTP server
-CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+CMD ["apache2ctl", "-D", "FOREGROUND"]
 
 # Expose port 80
 EXPOSE 80
